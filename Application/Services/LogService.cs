@@ -52,4 +52,32 @@ public class LogService: ILogService
 
         await _logRepository.InsertExceptionLogAsync(exceptionLog);
     }
+
+    public async Task<IEnumerable<AppLog>> GetAppLogsByModuleAsync(string module)
+    {
+        return await _logRepository.GetAppLogsByModuleAsync(module);
+    }
+
+    public async Task<IEnumerable<AccessLog>> GetFailedLoginsAsync(int lastHours)
+    {
+        return await _logRepository.GetFailedLoginsAsync(lastHours);
+        
+    }
+
+    public async Task<IEnumerable<AppLog>> GetAllAppLogsAsync()
+    {
+        return await _logRepository.GetAllAppLogsAsync();
+        
+    }
+
+    public async Task<IEnumerable<AccessLog>> GetAllAccessLogsAsync()
+    {
+        return await _logRepository.GetAllAccessLogsAsync();
+    }
+
+    public async Task<IEnumerable<ExceptionLog>> GetAllExceptionLogsAsync()
+    {
+        return await _logRepository.GetAllExceptionLogsAsync();
+        
+    }
 }

@@ -39,11 +39,33 @@ public class MongoLogRepository : ILogRepository
 
     public async Task<IEnumerable<AppLog>> GetAppLogsByModuleAsync(string module)
     {
-        throw new NotImplementedException();
+        var collection = _database.GetCollection<AppLog>(MongoCollections.AppLogs);
+        return await collection.Find(x => x.Module == module).ToListAsync();
     }
 
     public async Task<IEnumerable<AccessLog>> GetFailedLoginsAsync(int lastHours)
     {
-        throw new NotImplementedException();
+        var collection = _database.GetCollection<AccessLog>(MongoCollections.AccessLogs);
+        var timeThreshold = DateTime.UtcNow.AddHours(-lastHours);
+        
+        return await collection.Find(x => !x.IsSuccess && x.Timestamp >= timeThreshold).ToListAsync();
+    }
+
+    public async Task<IEnumerable<AppLog>> GetAllAppLogsAsync()
+    {
+        var collection = _database.GetCollection<AppLog>(MongoCollections.AppLogs);
+        return await collection.Find(_ => true).ToListAsync();
+    }
+
+    public async Task<IEnumerable<AccessLog>> GetAllAccessLogsAsync()
+    {
+        var collection = _database.GetCollection<AccessLog>(MongoCollections.AccessLogs);
+        return await collection.Find(_ => true).ToListAsync();
+    }
+
+    public async Task<IEnumerable<ExceptionLog>> GetAllExceptionLogsAsync()
+    {
+        var collection = _database.GetCollection<ExceptionLog>(MongoCollections.ExceptionLogs);
+        return await collection.Find(_ => true).ToListAsync();
     }
 }
