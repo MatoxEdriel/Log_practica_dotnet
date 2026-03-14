@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "4/kUdS8RwJU=",
+  "success": true,
+  "projectFilePath": "/Users/ingcampoverde/RiderProjects/Logs/Logs.Api/Logs.Api.csproj",
+  "expectedPackageFiles": [
+    "/Users/ingcampoverde/.nuget/packages/microsoft.aspnetcore.openapi/9.0.8/microsoft.aspnetcore.openapi.9.0.8.nupkg.sha512",
+    "/Users/ingcampoverde/.nuget/packages/microsoft.openapi/1.6.17/microsoft.openapi.1.6.17.nupkg.sha512"
+  ],
+  "logs": []
+}
