@@ -1,9 +1,22 @@
+using Domain.Interfaces;
+using Infrastructure.Repositories;
+using Infrastructure.Settings;
+
 var builder = WebApplication.CreateBuilder(args);
 
 
 builder.Services.AddOpenApi();
 
 var app = builder.Build();
+builder.Services.Configure<MongoDbSettings>(
+    builder.Configuration.GetSection("MongoDbSettings")
+);
+
+
+//por ahora la idea es quitar esto 
+builder.Services.AddScoped<ILogRepository, MongoLogRepository>();
+
+
 
 if (app.Environment.IsDevelopment())
 {
