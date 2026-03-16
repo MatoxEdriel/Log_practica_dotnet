@@ -1,5 +1,5 @@
-using Application.DTOs;
 using Domain.Entities;
+using Intercore.shared.DTOs;
 
 namespace Application.Interfaces;
 

@@ -1,7 +1,7 @@
-using Application.DTOs;
 using Application.Interfaces;
 using Domain.Entities;
 using Domain.Interfaces;
+using Intercore.shared.DTOs;
 
 namespace Application.Services;
 
