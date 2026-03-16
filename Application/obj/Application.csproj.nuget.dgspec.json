@@ -111,6 +111,12 @@
       "frameworks": {
         "net9.0": {
           "targetAlias": "net9.0",
+          "dependencies": {
+            "MongoDB.Bson": {
+              "target": "Package",
+              "version": "[3.7.0, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",
@@ -173,6 +179,10 @@
           "targetAlias": "net9.0",
           "dependencies": {
             "MassTransit": {
+              "target": "Package",
+              "version": "[8.1.3, )"
+            },
+            "MassTransit.Kafka": {
               "target": "Package",
               "version": "[8.1.3, )"
             },

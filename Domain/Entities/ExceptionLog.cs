@@ -1,7 +1,12 @@
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
+
 namespace Domain.Entities;
 
 public class ExceptionLog
 {
+    [BsonId] 
+    [BsonRepresentation(BsonType.String)]
     public Guid Id { get; set; } = Guid.NewGuid();
     public string ClassName { get; set; } = string.Empty;
     public string MethodName { get; set; } = string.Empty;

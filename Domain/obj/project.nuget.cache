@@ -1,8 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "F8i5VSm7Xkk=",
+  "dgSpecHash": "h7Ore+7yCYU=",
   "success": true,
   "projectFilePath": "/Users/ingcampoverde/RiderProjects/Logs/Domain/Domain.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "/Users/ingcampoverde/.nuget/packages/mongodb.bson/3.7.0/mongodb.bson.3.7.0.nupkg.sha512",
+    "/Users/ingcampoverde/.nuget/packages/system.memory/4.5.5/system.memory.4.5.5.nupkg.sha512",
+    "/Users/ingcampoverde/.nuget/packages/system.runtime.compilerservices.unsafe/5.0.0/system.runtime.compilerservices.unsafe.5.0.0.nupkg.sha512"
+  ],
   "logs": []
 }
