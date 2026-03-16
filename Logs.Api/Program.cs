@@ -1,41 +1,83 @@
+using Application.Services;
+using Infrastructure.Repositories;
+using Infrastructure.Settings;
+using Intercore.shared.Constans.KAFKA.topics;
+using Intercore.shared.Constans.KAFKA.groups;
+using Intercore.shared.DTOs;
+using Logs.Api.Consumers;
+using MassTransit;
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization;
+using MongoDB.Bson.Serialization.Serializers;
+
+BsonSerializer.RegisterSerializer(new GuidSerializer(GuidRepresentation.Standard));
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
+builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
+
+builder.Services.Configure<MongoDbSettings>(
+    builder.Configuration.GetSection("MongoDbSettings")
+);
+
+builder.Services.Scan(scan => scan
+    .FromAssembliesOf(typeof(MongoLogRepository), typeof(LogService))
+    .AddClasses(classes => classes
+        .Where(c => c.Name.EndsWith("Service") || c.Name.EndsWith("Repository")))
+    .AsImplementedInterfaces()
+    .WithScopedLifetime()
+);
+
+//masstransit kafka
+
+
+builder.Services.AddMassTransit(x =>
+{
+    x.UsingInMemory((context, cfg) => cfg.ConfigureEndpoints(context));
+
+    x.AddRider(rider =>
+    {
+        rider.AddConsumer<LogEventConsumer>();
+
+        rider.UsingKafka((context, k) =>
+        {
+            k.Host(builder.Configuration["Kafka:BootstrapServers"]);
+
+            k.TopicEndpoint<CreateAppLogDto>(KafkaTopics.AppLogs, LogsKafkaConstant.Id, e =>
+            {
+                e.ConfigureConsumer<LogEventConsumer>(context);
+            });
+
+            k.TopicEndpoint<CreateAccessLogDto>(KafkaTopics.AccessLogs, LogsKafkaConstant.Id, e =>
+            {
+                e.ConfigureConsumer<LogEventConsumer>(context);
+            });
+
+            k.TopicEndpoint<CreateExceptionLogDto>(KafkaTopics.ExceptionLogs, LogsKafkaConstant.Id, e =>
+            {
+                e.ConfigureConsumer<LogEventConsumer>(context);
+            });
+        });
+    });
+});
+
+builder.Services.AddHealthChecks();
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+    
+    
 }
 
 app.UseHttpsRedirection();
 
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
 
-app.MapGet("/weatherforecast", () =>
-    {
-        var forecast = Enumerable.Range(1, 5).Select(index =>
-                new WeatherForecast
-                (
-                    DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-                    Random.Shared.Next(-20, 55),
-                    summaries[Random.Shared.Next(summaries.Length)]
-                ))
-            .ToArray();
-        return forecast;
-    })
-    .WithName("GetWeatherForecast");
+app.MapControllers();
+
+app.MapHealthChecks("/health");
 
 app.Run();
 
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}

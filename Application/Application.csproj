@@ -8,6 +8,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Domain\Domain.csproj" />
+      <ProjectReference Include="..\practica_microservicios_dot_net\Intercore.shared\Intercore.shared.csproj" />
     </ItemGroup>
 
 </Project>
